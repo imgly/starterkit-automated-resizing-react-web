@@ -1,27 +1,43 @@
-import { useCallback, useRef, useState } from 'react';
-import type CreativeEditorSDK from '@cesdk/cesdk-js';
+import { useEffect, useRef, useState } from 'react';
+import CreativeEngine from '@cesdk/engine';
+import type { Configuration } from '@cesdk/cesdk-js';
 
 import { DEFAULT_TEMPLATES } from '../constants';
 import { resolveSceneUrl } from '../utils';
 
-export function useEngine() {
-  const cesdkRef = useRef<CreativeEditorSDK | null>(null);
+/**
+ * Boots a headless `CreativeEngine` for variant generation.
+ *
+ */
+export function useEngine(config: Partial<Configuration>) {
+  const engineRef = useRef<CreativeEngine | null>(null);
   const [isReady, setIsReady] = useState(false);
 
-  const handleInit = useCallback(async (cesdk: CreativeEditorSDK) => {
-    cesdkRef.current = cesdk;
-    cesdk.engine.editor.setSetting('page/title/show', false);
+  useEffect(() => {
+    let disposed = false;
 
-    // Pre-load initial template
-    const template = DEFAULT_TEMPLATES[0];
-    await cesdk.loadFromURL(resolveSceneUrl(template.sceneUrl));
+    CreativeEngine.init(config).then(async (engine) => {
+      if (disposed) {
+        engine.dispose();
+        return;
+      }
+      engine.editor.setSetting('page/title/show', false);
+      const template = DEFAULT_TEMPLATES[0];
+      await engine.scene.loadFromURL(resolveSceneUrl(template.sceneUrl));
+      engineRef.current = engine;
+      setIsReady(true);
+    });
 
-    setIsReady(true);
-  }, []);
+    return () => {
+      disposed = true;
+      engineRef.current?.dispose();
+      engineRef.current = null;
+      setIsReady(false);
+    };
+  }, [config]);
 
   return {
-    cesdk: cesdkRef.current,
-    isReady,
-    handleInit
+    engine: engineRef.current,
+    isReady
   };
 }

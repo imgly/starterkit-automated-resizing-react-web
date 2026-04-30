@@ -9,6 +9,11 @@
  * @returns Absolute URL that works in current deployment context
  */
 export function resolveAssetPath(path: string): string {
+  // Pass through absolute URLs (including blob: and data:) unchanged
+  if (/^(https?:|blob:|data:)/.test(path)) {
+    return path;
+  }
+
   // BASE_URL always ends with '/' in Vite
   const baseUrl = import.meta.env.BASE_URL || '/';
 

@@ -1,9 +1,12 @@
 import { useCallback, useState } from 'react';
 
+type SaveHandler = (sceneString: string) => void | Promise<void>;
+
 interface EditorModalState {
   isOpen: boolean;
   scene: string;
   mode: 'design' | 'advanced';
+  onSave?: SaveHandler;
 }
 
 export function useEditorModal() {
@@ -13,9 +16,12 @@ export function useEditorModal() {
     mode: 'advanced'
   });
 
-  const open = useCallback((scene: string, mode: 'design' | 'advanced') => {
-    setState({ isOpen: true, scene, mode });
-  }, []);
+  const open = useCallback(
+    (scene: string, mode: 'design' | 'advanced', onSave?: SaveHandler) => {
+      setState({ isOpen: true, scene, mode, onSave });
+    },
+    []
+  );
 
   const close = useCallback(() => {
     setState((prev) => ({ ...prev, isOpen: false }));
