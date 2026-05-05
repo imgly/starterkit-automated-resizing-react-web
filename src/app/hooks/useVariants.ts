@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import type CreativeEditorSDK from '@cesdk/cesdk-js';
+import type CreativeEngine from '@cesdk/engine';
 
 import { resize } from '../../imgly';
 import type { Template, VariantImage, SizePreset } from '../../imgly';
@@ -28,7 +28,7 @@ function createInitialVariants(sizes: SizePreset[]): VariantImage[] {
 }
 
 export function useVariants(
-  cesdk: CreativeEditorSDK | null,
+  engine: CreativeEngine | null,
   isEngineReady: boolean
 ) {
   const [variants, setVariants] = useState<VariantImage[]>(() =>
@@ -43,7 +43,7 @@ export function useVariants(
 
   const generate = useCallback(
     async (template: Template) => {
-      if (!cesdk || !isEngineReady) return;
+      if (!engine || !isEngineReady) return;
 
       revokeUrls();
 
@@ -62,7 +62,7 @@ export function useVariants(
         const scene = await resolveScene(template);
 
         await resize({
-          engine: cesdk.engine,
+          engine,
           sizes: DEFAULT_SIZES,
           scene,
           onProgress: (completed, _total, variant) => {
@@ -88,7 +88,7 @@ export function useVariants(
         setVariants(createInitialVariants(DEFAULT_SIZES));
       }
     },
-    [cesdk, isEngineReady, revokeUrls]
+    [engine, isEngineReady, revokeUrls]
   );
 
   const download = useCallback((variant: VariantImage) => {
@@ -96,5 +96,17 @@ export function useVariants(
     downloadFromUrl(variant.src, `${variant.size.label}.png`);
   }, []);
 
-  return { variants, generate, download };
+  const updateVariant = useCallback(
+    (sizeId: string, sceneString: string, previewUrl: string) => {
+      urlsRef.current.push(previewUrl);
+      setVariants((prev) =>
+        prev.map((v) =>
+          v.size.id === sizeId ? { ...v, sceneString, src: previewUrl } : v
+        )
+      );
+    },
+    []
+  );
+
+  return { variants, generate, download, updateVariant };
 }

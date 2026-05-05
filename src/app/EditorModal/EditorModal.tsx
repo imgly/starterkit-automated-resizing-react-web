@@ -18,6 +18,7 @@ interface EditorModalProps {
   scene: string;
   mode: EditorMode;
   onClose: () => void;
+  onSave?: (sceneString: string) => void | Promise<void>;
 }
 
 export function EditorModal({
@@ -25,7 +26,8 @@ export function EditorModal({
   isOpen,
   scene,
   mode,
-  onClose
+  onClose,
+  onSave
 }: EditorModalProps) {
   const handleInit = useCallback(
     async (cesdk: CreativeEditorSDK) => {
@@ -36,6 +38,13 @@ export function EditorModal({
         await initAutomatedResizingAdvancedEditor(cesdk);
       }
 
+      // Override the kit's default saveScene with an app-specific handler
+      // that bubbles the serialized scene back to the parent.
+      cesdk.actions.register('saveScene', async () => {
+        const sceneString = await cesdk.engine.scene.saveToString();
+        await onSave?.(sceneString);
+      });
+
       // Add back button to close the editor
       cesdk.ui.insertOrderComponent(
         { in: 'ly.img.navigation.bar', position: 'start' },
@@ -45,7 +54,7 @@ export function EditorModal({
       // Load scene
       await cesdk.loadFromString(scene);
     },
-    [scene, mode, onClose]
+    [scene, mode, onClose, onSave]
   );
 
   const handleBackdropClick = useCallback(() => {

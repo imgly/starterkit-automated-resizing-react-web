@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import CreativeEditor from '@cesdk/cesdk-js/react';
 import type { Configuration } from '@cesdk/cesdk-js';
 
 import type { Template, VariantImage } from '../imgly';
@@ -23,40 +22,63 @@ interface AppProps {
 
 export default function App({ config }: AppProps) {
   // State hooks
-  const engine = useEngine();
+  const { engine, isReady } = useEngine(config);
   const templates = useTemplates();
   const modal = useEditorModal();
-  const variants = useVariants(engine.cesdk, engine.isReady);
+  const variants = useVariants(engine, isReady);
+
+  // Render a preview thumbnail blob URL by exporting the given scene through
+  // the headless engine.
+  const renderPreview = useCallback(
+    async (sceneString: string): Promise<string | undefined> => {
+      if (!engine) return undefined;
+      await engine.scene.loadFromString(sceneString);
+      const scene = engine.scene.get();
+      if (scene == null) return undefined;
+      const blob = await engine.block.export(scene, { mimeType: 'image/png' });
+      return URL.createObjectURL(blob);
+    },
+    [engine]
+  );
 
   // Template edit handler - bridges engine and modal
   const handleTemplateEdit = useCallback(
     async (template: Template) => {
-      if (!engine.cesdk) return;
+      if (!engine) return;
 
       try {
         let scene = template.sceneString;
         if (!scene) {
-          await engine.cesdk.loadFromURL(resolveSceneUrl(template.sceneUrl));
-          scene = await engine.cesdk.engine.scene.saveToString();
+          await engine.scene.loadFromURL(resolveSceneUrl(template.sceneUrl));
+          scene = await engine.scene.saveToString();
         }
         if (scene) {
-          modal.open(scene, 'advanced');
+          modal.open(scene, 'advanced', async (sceneString) => {
+            const previewUrl = await renderPreview(sceneString);
+            templates.updateTemplate(template, sceneString, previewUrl);
+            modal.close();
+          });
         }
       } catch (error) {
         console.error('Failed to open template editor:', error);
       }
     },
-    [engine.cesdk, modal]
+    [engine, modal, renderPreview, templates]
   );
 
   // Variant edit handler - bridges variant and modal
   const handleVariantEdit = useCallback(
     (variant: VariantImage) => {
-      if (variant.sceneString) {
-        modal.open(variant.sceneString, 'design');
-      }
+      if (!variant.sceneString) return;
+      modal.open(variant.sceneString, 'design', async (sceneString) => {
+        const previewUrl = await renderPreview(sceneString);
+        if (previewUrl) {
+          variants.updateVariant(variant.size.id, sceneString, previewUrl);
+        }
+        modal.close();
+      });
     },
-    [modal]
+    [modal, renderPreview, variants]
   );
 
   // Generate handler - bridges templates and variants
@@ -66,11 +88,6 @@ export default function App({ config }: AppProps) {
 
   return (
     <div className={styles.app}>
-      {/* Hidden CE.SDK for resize operations */}
-      <div className={styles.hiddenEngine}>
-        <CreativeEditor config={config} init={engine.handleInit} />
-      </div>
-
       {/* Main content */}
       <div className={styles.content}>
         <TemplateSection
@@ -95,6 +112,7 @@ export default function App({ config }: AppProps) {
         scene={modal.scene}
         mode={modal.mode}
         onClose={modal.close}
+        onSave={modal.onSave}
       />
     </div>
   );
