@@ -8,6 +8,7 @@
  * @example
  * ```typescript
  * import CreativeEditorSDK from '@cesdk/cesdk-js';
+type CreativeEditorSDK = InstanceType<typeof CreativeEditorSDK>;
  * import {
  *   initAutomatedResizingDesignEditor,
  *   initAutomatedResizingAdvancedEditor,
