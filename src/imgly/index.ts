@@ -8,6 +8,7 @@
  * @example
  * ```typescript
  * import CreativeEditorSDK from '@cesdk/cesdk-js';
+type CreativeEditorSDK = InstanceType<typeof CreativeEditorSDK>;
  * import {
  *   initAutomatedResizingDesignEditor,
  *   initAutomatedResizingAdvancedEditor,
@@ -37,6 +38,7 @@
 import CreativeEditorSDK from '@cesdk/cesdk-js';
 import {
   BlurAssetSource,
+  ImageColorsAssetSource,
   ColorPaletteAssetSource,
   CropPresetsAssetSource,
   DemoAssetSources,
@@ -101,6 +103,7 @@ export async function initAutomatedResizingDesignEditor(
   cesdk.ui.setTheme('light');
 
   // Add asset source plugins
+  await cesdk.addPlugin(new ImageColorsAssetSource());
   await cesdk.addPlugin(new ColorPaletteAssetSource());
   await cesdk.addPlugin(new TypefaceAssetSource());
   await cesdk.addPlugin(new TextAssetSource());
@@ -142,6 +145,7 @@ export async function initAutomatedResizingAdvancedEditor(
   cesdk.ui.setTheme('dark');
 
   // Add asset source plugins
+  await cesdk.addPlugin(new ImageColorsAssetSource());
   await cesdk.addPlugin(new ColorPaletteAssetSource());
   await cesdk.addPlugin(new TypefaceAssetSource());
   await cesdk.addPlugin(new TextAssetSource());
