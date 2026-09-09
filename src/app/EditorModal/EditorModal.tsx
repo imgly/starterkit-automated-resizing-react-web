@@ -10,6 +10,7 @@ import {
 
 import styles from './EditorModal.module.css';
 
+
 type EditorMode = 'design' | 'advanced';
 
 interface EditorModalProps {

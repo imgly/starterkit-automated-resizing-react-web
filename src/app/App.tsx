@@ -10,6 +10,7 @@ import { EditorModal } from './EditorModal/EditorModal';
 
 import styles from './App.module.css';
 
+
 interface AppProps {
   config: Partial<Configuration>;
 }
