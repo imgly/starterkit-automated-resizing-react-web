@@ -3,13 +3,18 @@ import type { Configuration } from '@cesdk/cesdk-js';
 
 import type { Template, VariantImage } from '../imgly';
 
-import { useEngine, useTemplates, useEditorModal, useVariants } from './hooks';
+import {
+  useEngine,
+  useTemplates,
+  useEditorModal,
+  useVariants,
+  resolveSceneUrl
+} from './hooks';
 import { TemplateSection } from './TemplateSection/TemplateSection';
 import { VariantsSection } from './VariantsSection/VariantsSection';
 import { EditorModal } from './EditorModal/EditorModal';
 
 import styles from './App.module.css';
-
 
 interface AppProps {
   config: Partial<Configuration>;
@@ -27,7 +32,7 @@ export default function App({ config }: AppProps) {
   const renderPreview = useCallback(
     async (sceneString: string): Promise<string | undefined> => {
       if (!engine) return undefined;
-      await engine.scene.load(sceneString);
+      await engine.scene.loadFromString(sceneString);
       const scene = engine.scene.get();
       if (scene == null) return undefined;
       const blob = await engine.block.export(scene, { mimeType: 'image/png' });
@@ -44,7 +49,7 @@ export default function App({ config }: AppProps) {
       try {
         let scene = template.sceneString;
         if (!scene) {
-          await engine.scene.load(template.sceneUrl);
+          await engine.scene.loadFromURL(resolveSceneUrl(template.sceneUrl));
           scene = await engine.scene.saveToString();
         }
         if (scene) {
