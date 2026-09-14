@@ -10,7 +10,6 @@ import {
 
 import styles from './EditorModal.module.css';
 
-
 type EditorMode = 'design' | 'advanced';
 
 interface EditorModalProps {
@@ -53,7 +52,7 @@ export function EditorModal({
       );
 
       // Load scene
-      await cesdk.load(scene);
+      await cesdk.loadFromString(scene);
     },
     [scene, mode, onClose, onSave]
   );
