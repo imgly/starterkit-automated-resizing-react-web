@@ -32,6 +32,7 @@ export function EditorModal({
 }: EditorModalProps) {
   const handleInit = useCallback(
     async (cesdk: CreativeEditorSDK) => {
+
       // Select the appropriate editor based on mode
       if (mode === 'design') {
         await initAutomatedResizingDesignEditor(cesdk);
@@ -61,6 +62,13 @@ export function EditorModal({
   const handleBackdropClick = useCallback(() => {
     onClose();
   }, [onClose]);
+
+  // The debug handle only describes the editor that is currently open.
+  useEffect(() => {
+    if (!isOpen) return;
+    return () => {
+    };
+  }, [isOpen]);
 
   // Handle escape key
   useEffect(() => {
