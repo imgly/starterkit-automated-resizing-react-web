@@ -1,7 +1,7 @@
 /**
- * Feature Configuration - Enable/Disable Editor Capabilities
+ * Feature Configuration - Enable/Disable Advanced Editor Capabilities
  *
- * This file configures which features are available in the design editor.
+ * This file configures which features are available in the advanced editor.
  * Features control the visibility and availability of UI elements and functionality.
  *
  * ## Feature System Overview
@@ -16,6 +16,7 @@
  * - `'ly.img.text.*'` - All text features
  * - `'ly.img.crop.*'` - All crop features
  * - `'ly.img.video.*'` - All video features
+ * - `'ly.img.placeholder.*'` - All placeholder features
  *
  * @see https://img.ly/docs/cesdk/js/user-interface/customization/disable-or-enable-f058e2/
  */
@@ -23,16 +24,16 @@
 import type CreativeEditorSDK from '@cesdk/cesdk-js';
 
 /**
- * Configure which features are enabled in the design editor.
+ * Configure which features are enabled in the advanced editor.
  *
+ * Enables all professional editing features for power users.
  * Features are organized by category for easy customization.
- * Uncomment or add features as needed for your use case.
  *
  * @param cesdk - The CreativeEditorSDK instance to configure
  */
 export function setupFeatures(cesdk: CreativeEditorSDK): void {
   cesdk.feature.enable([
-    'ly.img.adjustment' /* Adjustments button */,
+    'ly.img.adjustment' /* Adjustments button (brightness, contrast, saturation, etc.) */,
 
     // 'ly.img.animations', /* Animations button (video mode) */
 
@@ -60,14 +61,11 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
     'ly.img.crop.scale' /* Crop scale controls */,
     'ly.img.crop.size' /* Crop size controls */,
 
-    'ly.img.cutout' /* Cutout controls */,
+    'ly.img.cutout' /* Cutout controls for background removal */,
 
     'ly.img.delete' /* Delete button and keyboard shortcut */,
 
     'ly.img.dock' /* Dock visibility */,
-
-    // 'ly.img.dragAndDrop', /* Enables all children below */
-    'ly.img.dragAndDrop.asset' /* Drag assets from the library onto blocks/pages */,
 
     'ly.img.duplicate' /* Duplicate button and copy/paste */,
 
@@ -91,23 +89,10 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
     'ly.img.group.ungroup' /* Dissolve group */,
 
     // 'ly.img.inspector', /* Inspector visibility */
-    'ly.img.inspector.bar' /* Inspector Bar visibility */,
+    'ly.img.inspector.bar' /* Inspector Bar visibility (contextual toolbar) */,
     'ly.img.inspector.toggle' /* Inspector Toggle button */,
 
     'ly.img.keyboard.shortcuts' /* Enable keyboard shortcuts */,
-
-    // 'ly.img.layerList', /* Enables all children below */
-    'ly.img.layerList.canvasFollow' /* Picking a row scrolls the canvas to it */,
-    // 'ly.img.layerList.combined', /* One tree of every page and its layers */
-    'ly.img.layerList.layers' /* Layers section */,
-    'ly.img.layerList.lock' /* Lock toggle on a row */,
-    'ly.img.layerList.menu' /* Ellipsis menu on a row */,
-    'ly.img.layerList.pages' /* Pages section */,
-    'ly.img.layerList.panel' /* Layer & Page List panel and its dock button */,
-    'ly.img.layerList.rename' /* Inline rename on a row */,
-    'ly.img.layerList.reorder' /* Drag a row to reorder */,
-    // 'ly.img.layerList.thumbnails', /* Thumbnail on every row */
-    'ly.img.layerList.visibility' /* Hide/show toggle on a layer row */,
 
     'ly.img.library.panel' /* Asset Library panel */,
 
@@ -116,7 +101,7 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
     'ly.img.navigation.back' /* "Back" button */,
     'ly.img.navigation.bar' /* Navigation Bar visibility */,
     'ly.img.navigation.close' /* "Close" button */,
-    'ly.img.navigation.documentSettings' /* Document settings button */,
+    // 'ly.img.navigation.documentSettings', /* Document settings button */
     'ly.img.navigation.undoRedo' /* "Undo" and "Redo" buttons */,
     'ly.img.navigation.zoom' /* Zoom controls */,
 
@@ -126,58 +111,51 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
 
     'ly.img.opacity' /* Opacity controls */,
 
-    // 'ly.img.page', /* Enables all page children below */
+    // 'ly.img.page', /* Enables all children below */
     'ly.img.page.add' /* Add Page button in Canvas Bar */,
     'ly.img.page.bleedMargin' /* Bleed margin controls */,
-    // 'ly.img.page.bleedColor', /* Bleed band color */
     'ly.img.page.clipContent' /* Clip content on/off toggle */,
-    // 'ly.img.page.printMarks.exclusionArea', /* Exclusion area controls */
-    // 'ly.img.page.printMarks.safetyMargin', /* Safety margin controls */
-    // 'ly.img.page.printMarks.safetyMargin.color', /* Safety margin color */
     'ly.img.page.move' /* Move Up/Down/Left/Right buttons */,
-    // 'ly.img.page.printMarks', /* Enables all children below */
-    // 'ly.img.page.printMarks.crop', /* Crop marks */
-    // 'ly.img.page.printMarks.registration', /* Registration marks */
     'ly.img.page.resize' /* Resize button and page formats */,
     'ly.img.page.settings' /* Read-only page dimensions, unit, and resolution */,
 
-    // 'ly.img.placeholder', /* Placeholder button in Canvas Menu */
+    // 'ly.img.placeholder', /* Enables all children below */
     // 'ly.img.placeholder.appearance', /* Appearance section */
-    // 'ly.img.placeholder.appearance.adjustments', /* Adjustments option */
+    'ly.img.placeholder.appearance.adjustments' /* Adjustments option */,
     // 'ly.img.placeholder.appearance.animations', /* Animations option */
-    // 'ly.img.placeholder.appearance.blur', /* Blur option */
-    // 'ly.img.placeholder.appearance.effect', /* Effect option */
-    // 'ly.img.placeholder.appearance.filter', /* Filter option */
-    // 'ly.img.placeholder.appearance.shadow', /* Shadow option */
+    'ly.img.placeholder.appearance.blur' /* Blur option */,
+    'ly.img.placeholder.appearance.effect' /* Effect option */,
+    'ly.img.placeholder.appearance.filter' /* Filter option */,
+    'ly.img.placeholder.appearance.shadow' /* Shadow option */,
     // 'ly.img.placeholder.arrange', /* Arrange section */
-    // 'ly.img.placeholder.arrange.flip', /* Flip option */
-    // 'ly.img.placeholder.arrange.move', /* Move option */
-    // 'ly.img.placeholder.arrange.resize', /* Resize option */
-    // 'ly.img.placeholder.arrange.rotate', /* Rotate option */
+    'ly.img.placeholder.arrange.flip' /* Flip option */,
+    'ly.img.placeholder.arrange.move' /* Move option */,
+    'ly.img.placeholder.arrange.resize' /* Resize option */,
+    'ly.img.placeholder.arrange.rotate' /* Rotate option */,
     // 'ly.img.placeholder.audio', /* Audio section */
     // 'ly.img.placeholder.audio.change', /* Replace Audio option */
     // 'ly.img.placeholder.fill', /* Fill section */
-    // 'ly.img.placeholder.fill.actAsPlaceholder', /* Act as Placeholder option */
-    // 'ly.img.placeholder.fill.change', /* Change Fill option */
-    // 'ly.img.placeholder.fill.changeType', /* Change Fill Type option */
-    // 'ly.img.placeholder.fill.crop', /* Crop option */
+    'ly.img.placeholder.fill.actAsPlaceholder' /* Act as Placeholder option */,
+    'ly.img.placeholder.fill.change' /* Change Fill option */,
+    'ly.img.placeholder.fill.changeType' /* Change Fill Type option */,
+    'ly.img.placeholder.fill.crop' /* Crop option */,
     // 'ly.img.placeholder.general', /* General section (opacity, blend, etc.) */
-    // 'ly.img.placeholder.general.blendMode', /* Blend Mode option */
-    // 'ly.img.placeholder.general.delete', /* Delete option */
-    // 'ly.img.placeholder.general.duplicate', /* Duplicate option */
-    // 'ly.img.placeholder.general.opacity', /* Opacity option */
+    'ly.img.placeholder.general.blendMode' /* Blend Mode option */,
+    'ly.img.placeholder.general.delete' /* Delete option */,
+    'ly.img.placeholder.general.duplicate' /* Duplicate option */,
+    'ly.img.placeholder.general.opacity' /* Opacity option */,
     // 'ly.img.placeholder.shape', /* Shape section */
-    // 'ly.img.placeholder.shape.change', /* Change Shape option */
+    'ly.img.placeholder.shape.change' /* Change Shape option */,
     // 'ly.img.placeholder.stroke', /* Stroke section */
-    // 'ly.img.placeholder.stroke.change', /* Change Stroke option */
+    'ly.img.placeholder.stroke.change' /* Change Stroke option */,
     // 'ly.img.placeholder.text', /* Text section */
-    // 'ly.img.placeholder.text.actAsPlaceholder', /* Act as Placeholder option */
-    // 'ly.img.placeholder.text.character', /* Character option */
-    // 'ly.img.placeholder.text.edit', /* Edit Text option */
+    'ly.img.placeholder.text.actAsPlaceholder' /* Act as Placeholder option */,
+    'ly.img.placeholder.text.character' /* Character option */,
+    'ly.img.placeholder.text.edit' /* Edit Text option */,
 
     // 'ly.img.playbackSpeed', /* Playback speed control */
 
-    // 'ly.img.position', /* Position dropdown */
+    // 'ly.img.position', /* Position dropdown (layer ordering) */
     'ly.img.position.align' /* Align left/right/center/top/bottom */,
     'ly.img.position.arrange' /* Bring forward/backward/front/back */,
     'ly.img.position.distribute' /* Distribute vertically/horizontally */,
@@ -189,11 +167,11 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
     'ly.img.replace.fill' /* Replace image/video fill content */,
     'ly.img.replace.shape' /* Replace block shape */,
 
-    // 'ly.img.rulers', /* Grid overlay, snap-to-grid, and canvas rulers */
+    'ly.img.rulers' /* Grid overlay, snap-to-grid, and canvas rulers */,
 
     // 'ly.img.scene.fontSizeUnit', /* Font size unit selector in page resize panel */
     // 'ly.img.scene.layout', /* Enables all children below */
-    'ly.img.scene.layout.free' /* Free layout toggle */,
+    'ly.img.scene.layout.free' /* Free layout toggle in page layout controls */,
     'ly.img.scene.layout.horizontal' /* Horizontal layout toggle */,
     'ly.img.scene.layout.spacing' /* Gap + screen-space toggle for stacked layouts */,
     'ly.img.scene.layout.vertical' /* Vertical layout toggle */,
@@ -208,7 +186,7 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
     'ly.img.shadow.color.picker.opacity' /* Alpha/opacity slider */,
     'ly.img.shadow.offset' /* Shadow angle and distance */,
 
-    // 'ly.img.shape.edit', /* Edit Path button in Shape Options (advanced editors only) */
+    'ly.img.shape.edit' /* Edit Path button in Shape Options */,
     // 'ly.img.shape.options', /* Shape Options dropdown */
     'ly.img.shape.options.cornerRadius' /* Corner radius (rect/polygon) */,
     'ly.img.shape.options.innerDiameter' /* Star inner diameter */,
@@ -259,15 +237,15 @@ export function setupFeatures(cesdk: CreativeEditorSDK): void {
 
     // 'ly.img.transitions', /* Transitions button (video mode) */
 
-    'ly.img.trim' /* Trim button (video mode) */
+    'ly.img.trim' /* Trim button (video mode) */,
 
     // 'ly.img.vectorEdit', /* Vector edit controls (parent) */
-    // 'ly.img.vectorEdit.addMode', /* Add node mode toggle */
-    // 'ly.img.vectorEdit.bendMode', /* Bend mode toggle */
-    // 'ly.img.vectorEdit.deleteMode', /* Delete node mode toggle */
-    // 'ly.img.vectorEdit.done', /* Exit vector edit button */
-    // 'ly.img.vectorEdit.mirrorMode', /* Handle mirror mode dropdown */
-    // 'ly.img.vectorEdit.moveMode', /* Move/select mode toggle */
+    'ly.img.vectorEdit.addMode' /* Add node mode toggle */,
+    'ly.img.vectorEdit.bendMode' /* Bend mode toggle */,
+    'ly.img.vectorEdit.deleteMode' /* Delete node mode toggle */,
+    'ly.img.vectorEdit.done' /* Exit vector edit button */,
+    'ly.img.vectorEdit.mirrorMode' /* Handle mirror mode dropdown */,
+    'ly.img.vectorEdit.moveMode' /* Move/select mode toggle */
 
     // 'ly.img.video', /* Enables all children below */
     // 'ly.img.video.caption', /* Video captions */

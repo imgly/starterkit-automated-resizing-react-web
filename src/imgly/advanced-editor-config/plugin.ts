@@ -1,16 +1,17 @@
 /**
- * Design Editor Plugin - Complete Design Editing Configuration for CE.SDK
+ * Advanced Editor Plugin - Professional Full-Featured Editing Configuration for CE.SDK
  *
- * This plugin provides a production-ready design editor configuration with
- * templates, elements, asset libraries, and comprehensive editing capabilities.
+ * This plugin provides a production-ready advanced editor configuration with
+ * all professional editing capabilities, complete asset libraries, and comprehensive
+ * customization options for power users.
  *
  * @example Basic usage
  * ```typescript
  * import CreativeEditorSDK from '@cesdk/cesdk-js';
- * import { DesignEditorConfig } from './plugin';
+ * import { AdvancedEditorConfig } from './plugin';
  *
  * const cesdk = await CreativeEditorSDK.create('#editor', config);
- * await cesdk.addPlugin(new DesignEditorConfig());
+ * await cesdk.addPlugin(new AdvancedEditorConfig());
  * await cesdk.actions.run('scene.create');
  * ```
  *
@@ -29,19 +30,19 @@ import { setupSettings } from './settings';
 import { setupUI } from './ui';
 
 /**
- * Design Editor configuration plugin.
+ * Advanced Editor configuration plugin.
  *
- * Provides a complete design editing experience optimized for creating
- * graphics, templates, marketing materials, and multi-page documents.
+ * Provides a complete professional editing experience optimized for power users,
+ * with all features enabled, comprehensive asset libraries, and advanced customization.
  *
  * @public
  */
-export class DesignEditorConfig implements EditorPlugin {
+export class AdvancedEditorConfig implements EditorPlugin {
   /**
    * Unique identifier for this plugin.
    * Used to identify the plugin in the CE.SDK plugin registry.
    */
-  name = 'cesdk-design-editor';
+  name = 'cesdk-advanced-editor';
 
   /**
    * Plugin version - matches the CE.SDK version for compatibility.
@@ -49,7 +50,7 @@ export class DesignEditorConfig implements EditorPlugin {
   version = CreativeEditorSDK.version;
 
   /**
-   * Initialize the design editor configuration.
+   * Initialize the advanced editor configuration.
    *
    * This method is called when the plugin is added to CE.SDK via addPlugin().
    * It sets up all features, UI components, translations, and settings.
@@ -60,7 +61,7 @@ export class DesignEditorConfig implements EditorPlugin {
     if (cesdk) {
       // #region Editor Reset
       // Reset editor to clear any previous configuration
-      // This ensures a clean slate when applying the design editor config
+      // This ensures a clean slate when applying the advanced editor config
       cesdk.resetEditor();
       // #endregion
 
@@ -68,7 +69,13 @@ export class DesignEditorConfig implements EditorPlugin {
       // The CE.SDK generation the calls below were written for. Pinned to a
       // literal at publish time, so upgrading CE.SDK in a copy of this kit
       // keeps the editor behaving as it did when the kit was taken.
-      cesdk.setEditorCompatibilityVersion('1.84.0');
+      cesdk.setEditorCompatibilityVersion('1.82.3-rc.0');
+      // #endregion
+
+      // #region Advanced View Mode
+      // Set advanced view mode for professional editing capabilities
+      // This enables all advanced features and UI elements
+      cesdk.ui.setView('advanced');
       // #endregion
 
       // #region Feature Configuration
@@ -111,7 +118,6 @@ export class DesignEditorConfig implements EditorPlugin {
       // ui.elements.*, locale, i18n) that were cleared by resetEditor() above.
       // If you have already migrated to the respective API calls, you can
       // safely remove this line.
-      // eslint-disable-next-line -- Intentional backward-compat shim for pre-migration user configurations. Remove once all deprecated configuration paths are dropped.
       cesdk.reapplyLegacyUserConfiguration();
     }
   }
